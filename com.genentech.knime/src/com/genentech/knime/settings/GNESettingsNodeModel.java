@@ -72,7 +72,7 @@ public class GNESettingsNodeModel extends NodeModel {
 	}
 	
 	private void pushVariableMap() {
-		for (Map.Entry<String, String> e : Settings.GNEProperties.entrySet()) {
+		for (Map.Entry<String, String> e : Settings.getGNEProperties().entrySet()) {
 			pushFlowVariableString(e.getKey(), e.getValue());
 		}
 		

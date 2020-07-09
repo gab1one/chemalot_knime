@@ -37,7 +37,7 @@ import org.eclipse.jsch.core.IJSchService;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionMonitor;
 
-import com.genentech.knime.GNENodeActivator;
+import com.genentech.knime.GNEPlugin;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
 import com.jcraft.jsch.Session;
@@ -79,7 +79,7 @@ public final class SSHUtil {
         String remoteHost = configSettings.getRemoteHost();
 
         IJSchService service =
-        	GNENodeActivator.getDefault().getIJSchService();
+        	GNEPlugin.getDefault().getIJSchService();
         IJSchLocation location = service.getLocation(user, remoteHost, port);
         UserInfo userInfo = configSettings.createJSchUserInfo();
 

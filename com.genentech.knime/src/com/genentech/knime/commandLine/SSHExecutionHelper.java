@@ -48,7 +48,7 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.workflow.FlowVariable;
 
-import com.genentech.knime.GNENodeActivator;
+import com.genentech.knime.GNEPlugin;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
@@ -289,7 +289,7 @@ public class SSHExecutionHelper {
        }
        
        IJSchService service =
-           GNENodeActivator.getDefault().getIJSchService();
+           GNEPlugin.getDefault().getIJSchService();
        IJSchLocation location = service.getLocation(user, remoteHost, port);
        UserInfo userInfo = configSettings.getSSHUserInfo();
 

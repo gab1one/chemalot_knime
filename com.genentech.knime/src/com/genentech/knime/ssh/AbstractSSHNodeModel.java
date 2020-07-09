@@ -101,7 +101,8 @@ public abstract class AbstractSSHNodeModel extends NodeModel {
    private TABSSHToolSettings configSettings = createSettings();
    
    // hard coded to prd because SDF/TABSSH nodes do not have dialog
-   private static final String CSHSettingsFile = Settings.SSHInitFileTemplate.replaceAll("\\$mode", "prd");
+   // TODO Fix this
+   private static final String CSHSettingsFile = Settings.getSSHInitFileTemplate().replaceAll("\\$mode", "prd");
 
    
    /** Create node with one input and two output ports

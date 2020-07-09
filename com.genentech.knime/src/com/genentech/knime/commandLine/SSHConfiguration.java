@@ -69,8 +69,8 @@ public class SSHConfiguration {
 
     public static final int DEFAULTSshPort = 22;
 
-    private static final int DEFAULTSshTimeoutSec = Settings.SSHTimeout;
-    private static final String DEFAULTSshHost = Settings.SSHRemoteHost;
+    private static final int DEFAULTSshTimeoutSec = Settings.getSSHTimeout();
+    private static final String DEFAULTSshHost = Settings.getSSHRemoteHost();
 
     private static final String DEFAULTRunMode = "prd";
     private final String m_remoteHost;
@@ -109,7 +109,7 @@ public class SSHConfiguration {
         m_runMode = runMode;
         m_errLogFile = errLogFile;
         m_executeSSH = executeSSH;
-        m_initScriptName = Settings.SSHInitFileTemplate.replaceAll("\\$mode", runMode);
+        m_initScriptName = Settings.getSSHInitFileTemplate().replaceAll("\\$mode", runMode);
     }
     
     public String getRemoteHost()

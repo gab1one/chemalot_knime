@@ -38,7 +38,10 @@ import com.genentech.knime.Settings;
  */
 public abstract class CMDProgramDefinition implements
         Comparable<CMDProgramDefinition> { 
-    static final String HELPFilePath = Settings.CONFIGPath + "/cmdLine/helpText";
+	
+	// TODO replace with reference to file shipped with bundle
+//    static final String HELPFilePath = Settings.CONFIGPath + "/cmdLine/helpText";
+    static final String HELPFilePath = null;
 
     /** used as Node ID */
     private final String name;
