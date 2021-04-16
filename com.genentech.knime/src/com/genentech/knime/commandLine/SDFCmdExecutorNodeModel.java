@@ -60,12 +60,12 @@ public class SDFCmdExecutorNodeModel extends AbstractCommandNodeModel {
        SDFCmdPortObjectSpec spec = object.getSpec();
        pushFlowVariable(spec);
        if (spec.getSSHConfiguration().isExecuteSSH()) {
-           return new PortObject[]{object.getTable()};
+           return new PortObject[]{object.getTable(exec)};
        }
        File tmpFile = File.createTempFile("SDFCmd_", ".sdf");
        SSHExecutionResult sshRes = runSSHExecute(spec, exec, tmpFile);
 
-       BufferedDataTable outTable = SDFCmdPortObject.getTable(sshRes.getStdOut());
+       BufferedDataTable outTable = SDFCmdPortObject.getTable(sshRes.getStdOut(), exec);
        sshRes.getStdOut().delete();
        tmpFile.delete();
        return new PortObject[] {outTable};

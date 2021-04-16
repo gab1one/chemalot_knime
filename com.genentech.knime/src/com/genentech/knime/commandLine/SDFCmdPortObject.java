@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 
 import javax.swing.JComponent;
@@ -178,45 +179,29 @@ public class SDFCmdPortObject implements PortObject {
 
     @Override
     public JComponent[] getViews() {
-        if (!m_spec.getSSHConfiguration().isExecuteSSH()) {
+        if (!m_spec.getSSHConfiguration().isExecuteSSH() || m_table == null) {
             return new JComponent[0];
         }
-        try {
-            BufferedDataTable table = getTable();
-            DataTableSpecExtractor e = new DataTableSpecExtractor();
-            e.setPossibleValueOutputFormat(PossibleValueOutputFormat.Collection);
-            e.setPropertyHandlerOutputFormat(PropertyHandlerOutputFormat.Hide);        
-//            e.setExtractPossibleValuesAsCollection(true);
-//            e.setExtractPropertyHandlers(false);
-            DataTable extract = e.extract(table.getSpec());
-            BufferedDataTableView bdtView = new BufferedDataTableView(table);
-            BufferedDataTableView dtsView = new BufferedDataTableView(extract);
-            return new JComponent[]{bdtView, dtsView};
-        } catch (IOException ioe) {
-            JTextArea area = new JTextArea();
-            area.setText(ioe.getMessage() + "\n" + ioe.getCause());
-            return new JComponent[]{area};
-        }
+        BufferedDataTable table = m_table;
+        DataTableSpecExtractor e = new DataTableSpecExtractor();
+        e.setPossibleValueOutputFormat(PossibleValueOutputFormat.Collection);
+        e.setPropertyHandlerOutputFormat(PropertyHandlerOutputFormat.Hide);        
+        DataTable extract = e.extract(table.getSpec());
+        BufferedDataTableView bdtView = new BufferedDataTableView(table);
+        BufferedDataTableView dtsView = new BufferedDataTableView(extract);
+        return new JComponent[]{bdtView, dtsView};
     }
     
-    public BufferedDataTable getTable() throws IOException {
+    public BufferedDataTable getTable(ExecutionContext exec) throws IOException {
         if (m_table != null) {
             return m_table;
         }
-        m_table = getTable(m_sdfTempFile);
+        m_table = getTable(m_sdfTempFile, exec);
         return m_table;
     }
     
-    public static BufferedDataTable getTable(final File sdfFile) 
+    public static BufferedDataTable getTable(final File sdfFile, ExecutionContext exec) 
             throws IOException {
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        NodeFactory<NodeModel> dummyFactory =
-            (NodeFactory) new VirtualParallelizedChunkPortObjectInNodeFactory(new PortType[0]);
-        Node node = new Node(dummyFactory);
-        ExecutionContext exec = new ExecutionContext(
-                new DefaultNodeProgressMonitor(), node,
-                SingleNodeContainer.MemoryPolicy.CacheOnDisc,
-                new HashMap<Integer, ContainerTable>());
         /*TODO: 
          *This part is sdf-specific. We could write out the data differently,
          *if we know the port type.
@@ -226,7 +211,7 @@ public class SDFCmdPortObject implements PortObject {
         rSettings.extractSDF(false);
         rSettings.extractMol(true);
         rSettings.extractAllProperties(true);
-        ArrayList<URL> iFiles = new ArrayList<URL>(1);
+        List<URL> iFiles = new ArrayList<>(1);
         iFiles.add(sdfFile.toURI().toURL());
         rSettings.urls(iFiles);
         DefaultSDFReader sdfReader = new DefaultSDFReader(rSettings);
