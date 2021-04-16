@@ -28,29 +28,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 
 import javax.swing.JComponent;
-import javax.swing.JTextArea;
 
-//import org.knime.base.data.util.DataTableSpecExtractor;
 import org.knime.chem.base.node.io.sdf.DefaultSDFReader;
 import org.knime.chem.base.node.io.sdf.SDFReaderSettings;
 import org.knime.core.data.DataTable;
-import org.knime.core.data.container.ContainerTable;
 import org.knime.core.data.util.DataTableSpecExtractor;
 import org.knime.core.data.util.DataTableSpecExtractor.PossibleValueOutputFormat;
 import org.knime.core.data.util.DataTableSpecExtractor.PropertyHandlerOutputFormat;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.DefaultNodeProgressMonitor;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
-import org.knime.core.node.Node;
-import org.knime.core.node.NodeFactory;
-import org.knime.core.node.NodeModel;
 import org.knime.core.node.port.PortObject;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.port.PortObjectZipInputStream;
@@ -58,8 +50,6 @@ import org.knime.core.node.port.PortObjectZipOutputStream;
 import org.knime.core.node.port.PortType;
 import org.knime.core.node.port.PortTypeRegistry;
 import org.knime.core.node.workflow.BufferedDataTableView;
-import org.knime.core.node.workflow.SingleNodeContainer;
-import org.knime.core.node.workflow.virtual.parchunk.VirtualParallelizedChunkPortObjectInNodeFactory;
 import org.knime.core.util.FileUtil;
 
 /** 
@@ -73,14 +63,12 @@ public class SDFCmdPortObject implements PortObject {
      * <code>PortObject.class</code> from this class.
      */
     public static final PortType TYPE = PortTypeRegistry.getInstance().getPortType(SDFCmdPortObject.class);
-//  public static final PortType TYPE = new PortType(SDFCmdPortObject.class);
 
     /**
      * Optional SDFCmd port type formed <code>PortObjectSpec.class</code> and
      * <code>PortObject.class</code> from this class.
      */
     public static final PortType TYPE_OPTIONAL = PortTypeRegistry.getInstance().getPortType(SDFCmdPortObject.class, true);
-    //public static final PortType TYPE_OPTIONAL = new PortType(SDFCmdPortObject.class, true);
     
     
     private final SDFCmdPortObjectSpec m_spec;
