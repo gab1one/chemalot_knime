@@ -258,9 +258,10 @@ public abstract class AbstractSSHNodeModel extends NodeModel {
                execChannel.disconnect();
             }
             if (tmpInStrm != null) {
-            tmpInStrm.close();
-            tmpInFile.delete();
-            if( tempFile != null) tempFile.delete();
+				tmpInStrm.close();
+            if( tempFile != null) {
+            	tempFile.delete();
+            }
          }
             tmpOutStrm.close();
          }

@@ -315,7 +315,7 @@ public class SSHExecutionHelper {
            }
        } 
        
-       if (firstE.getMessage() != null && !firstE.getMessage().isEmpty()) {
+       if (firstE != null && firstE.getMessage() != null && !firstE.getMessage().isEmpty()) {
            throw firstE;
        }
        throw new IllegalStateException("Couldn't establish SSH session.", firstE);

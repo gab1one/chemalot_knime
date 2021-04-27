@@ -113,24 +113,30 @@ public class KnimeSDFCMDBridgeNodeModel extends AbstractCommandNodeModel {
         CommandObject command = CommandList.SDF_KNIME_BRIDGE.createComamndObject(remoteFile, mysubOpts);
         writeTableToSDFFile(exec, inTable, tmpExchangeFile);
 
-        SDFCmdPortObjectSpec outSpec = new SDFCmdPortObjectSpec( command, m_sshConfiguration);
+        SDFCmdPortObjectSpec outSpec = new SDFCmdPortObjectSpec(command, m_sshConfiguration);
 
-        if( m_sshConfiguration.isExecuteSSH() ) {
+       	SDFCmdPortObject sdfCmdPortObject;
+        if (m_sshConfiguration.isExecuteSSH()) {
             SSHExecutionResult sshRes = null;
             try {
                 sshRes = runSSHExecute(outSpec, exec, null);
-            }finally
-            {   // this was done only for debugging, downstream nodes will read from tmpExchangeFile
+                sdfCmdPortObject = new SDFCmdPortObject(outSpec, tmpExchangeFile);
+                sdfCmdPortObject.getTable(exec); // initialize internal table for views
+            } finally {   // this was done only for debugging, downstream nodes will read from tmpExchangeFile
                 try { 
                  // stderr is still used in AbstractCommandNodeModel
-                sshRes.getStdOut().delete();
-                }catch(Exception e)
-                {   LOGGER.error(e);
+                	if(sshRes != null) {
+                		sshRes.getStdOut().delete();
+                	}
+                }catch(Exception e) {   
+                	LOGGER.error(e);
                 }
             }
+        } else {
+			sdfCmdPortObject = new SDFCmdPortObject(outSpec, tmpExchangeFile);
         }
         
-        return new PortObject[]{new SDFCmdPortObject(outSpec, tmpExchangeFile)};
+		return new PortObject[]{sdfCmdPortObject};
     }
 
  
